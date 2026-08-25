@@ -118,7 +118,7 @@ Industry research and Snowflake customer outcomes:
 - **86% of global palm oil buyers now require full traceability to plantation level** — [CDP Forests](https://www.cdp.net/en/forests)
 - **RSPO-certified traceable palm oil commands 8-12% price premium over non-traceable** — [RSPO](https://rspo.org/impact/)
 - **Malaysia's MSPO mandatory certification covers 94% of planted area as of 2023** — [MPOCC](https://www.mpocc.org.my/)
-- **Supply chain traceability reduces fraud risk by 45% and improves buyer confidence scores** — [Deloitte Supply Chain](https://www2.deloitte.com/us/en/pages/operations/articles/supply-chain-transparency.html)
+- **Supply chain traceability reduces fraud risk by 45% and improves buyer confidence scores** — [Deloitte Supply Chain](https://www.deloitte.com/us/en/services/consulting/supply-chain-and-network-operations.html)
 - **Honeywell** (Snowflake customer): connects 500K+ machines on Snowflake, enabling precision agriculture analytics across 400M+ acres globally -- [snowflake.com/customers/honeywell](https://www.snowflake.com/en/customers/all-customers/video/honeywell/)
 
 ## Key Demo Numbers
