@@ -1,109 +1,83 @@
-# Demo Script: Supply Chain Traceability
-## ~4-Minute Recorded Walkthrough
-**Format**: Screen recording with voiceover
-**Target**: Customer meeting / booth loop / social share
-**Narrative**: "Snowflake builds mill-to-port chain-of-custody with Dynamic Tables, enables auditor self-service via Iceberg/Athena, and enforces buyer-level data segregation — all native SQL, no external blockchain needed"
-**Demo Mode**: Open app with `?demo=true` for presenter notes
+# Supply Chain Traceability
 
----
+**Malaysia - Palm Oil & Agriculture**
+Use case: Supply Chain Traceability
 
-## Two Personas
+> Mill-to-port traceability for Malaysian palm oil — Dynamic Tables build chain-of-custody, Iceberg enables auditor self-service via Athena, and Row Access Policies enforce buyer-level data segregation.
 
-| Persona | Role | Tool | What they care about |
-|---|---|---|---|
-| **Puan Rosnah binti Abdullah** | VP Supply Chain | React App (SPCS) | End-to-end traceability, buyer compliance requirements, shipment delays, NDPE commitments |
-| **James Ong** | Traceability Auditor | Amazon QuickSight | Audit trail integrity, certification verification, mass balance reconciliation, data access controls |
+## Why Snowflake
 
----
+Snowflake builds mill-to-port chain-of-custody with Dynamic Tables, enables auditor self-service via Iceberg/Athena, and enforces buyer-level data segregation — all native SQL, no external blockchain needed
 
-## What's Built
+- **Dynamic Tables for real-time chain-of-custody** - Only demo building supply chain traceability with Dynamic Tables — not batch ETL
+- **Iceberg Tables for auditor self-service via Athena** - Only demo enabling external auditor access without Snowflake license
+- **Row Access Policies for buyer data segregation** - Only demo enforcing multi-buyer data isolation in supply chain context
+- **Malaysian palm oil traceability context** - RSPO, MSPO, NDPE-specific with realistic mill names and supply chain structure
+- **200 audit reports searchable** - Cortex Search on third-party audit findings with severity classification
+- **AWS Lake Formation + Iceberg integration** - Only demo showing Snowflake governance as alternative to Lake Formation for supply chain
 
-| Layer | Component | Detail |
+## What is deployed
+
+| | |
+|---|---|
+| Database | `MY_PALM_OIL_TRACEABILITY` |
+| Service | `MY_PALM_OIL_TRACEABILITY_APP` |
+| Compute pool | `SEA_DEMOS_MALAYSIA_POOL` |
+| Dimension table | `RAW.BUYERS` (20 rows) |
+| Fact table | `RAW.CHAIN_OF_CUSTODY` (250,000 rows, 90 days) |
+| Curated layer | `CURATED.PERFORMANCE_SUMMARY`, `CURATED.TREND_ANALYSIS`, `CURATED.KPI_SUMMARY` |
+| Currency | MYR (RM) |
+
+Regions in play: Selangor, Johor, Penang, Sabah, Sarawak
+Segments: MSPO Certified, RSPO Certified, In Transition, Uncertified
+
+Dynamic tables are created suspended and refreshed on demand:
+
+```bash
+./refresh_demo_data.sh MY_PALM_OIL_TRACEABILITY
+```
+
+## KPI cards
+
+Every card below is served live from `CURATED.KPI_SUMMARY`. The app keeps the
+original literal as a fallback, so it still renders if Snowflake is unreachable.
+
+| Card | Value | Backed by |
 |---|---|---|
-| **RAW** | 7 tables | MILLS (100), SHIPMENTS (20000), CHAIN_OF_CUSTODY (50000), CERTIFICATIONS (3000), AUDIT_REPORTS (200), BUYERS (30), PLANTATION_SUPPLIERS (500) |
-| **CURATED** | 4 Dynamic Tables | FULL_CHAIN_OF_CUSTODY, MILL_TRACEABILITY_SCORE, BUYER_SUPPLY_CHAIN_VIEW, MASS_BALANCE_RECONCILIATION |
-| **ML** | ML.ANOMALY_DETECTION | Forecasting + anomaly detection |
-| **AI** | AI_PARSE_DOCUMENT, SUMMARIZE, AI_CLASSIFY | Classification + extraction |
-| **Search** | Cortex Search | 200 documents indexed |
-| **Agent** | TRACEABILITY_AGENT | Semantic View + Search tools |
+| TTP Coverage | `96.8%` | average per event |
+| MSPO Certified | `87%` | average per event |
+| Smallholders Traced | `98K` | total across Buyers |
+| Mills Monitored | `247` | total across Buyers |
+| Collection Points | `1,247` | total across Buyers |
+| GPS-Mapped Plots | `84K` | total across Buyers |
+| Data Completeness | `98%` | average per event |
 
 
----
+## Demo flow
 
-## The Story
+1. Executive Cockpit
+2. Chain of Custody
+3. Auditor Access
+4. Ask AI
+5. Architecture & Data
 
-A major Malaysian palm oil group operates 100 mills sourcing from 500 plantation suppliers across Peninsular Malaysia, Sabah, and Sarawak. International buyers like Unilever, Nestlé, and Wilmar require full plantation-to-port traceability and NDPE compliance proof. Eight mills are below the 95% traceability threshold, and mass balance reconciliation flags 3 mills with suspicious variance. Auditors need self-service access without a Snowflake license.
+## Talking points
 
----
+- **100 mills** - tracked across Peninsular, Sabah, and Sarawak
+- **50,000 records** - chain-of-custody entries maintained in real-time
+- **99.2% traceable** - volume traceable to plantation level
+- **RM 8.9B** - traced export volume this year
+- **200 audit reports** - searchable via Cortex Search
+- **8 mills** - below 95% traceability threshold
+- **3 mills** - flagged for mass balance variance >5%
 
-## Script
+## Business impact
 
-### [0:00–0:45] EXECUTIVE COCKPIT
-
-**Show**: Executive Cockpit tab
-
-> "One hundred mills tracked — 99.2% of volume traceable to plantation level."
-
-**Action**: Point at the 99.2% traceability KPI
-
-### [0:45–1:30] CHAIN OF CUSTODY
-
-**Show**: Chain of Custody tab
-
-> "Full plantation-to-port chain for every tonne of CPO — built automatically by Dynamic Tables."
-
-**Action**: Click shipment SHP-2024-0847 for full chain visualization
-
-### [1:30–2:15] AUDITOR ACCESS
-
-**Show**: Auditor Access tab
-
-> "Row Access Policies enforce buyer-level data segregation — Unilever sees only their supply chain."
-
-**Action**: Show Row Access Policy in action — toggle between buyer views
-
-### [2:15–3:00] ASK AI
-
-**Show**: Ask AI tab
-
-> "Puan Rosnah asks: 'What percentage of our volume is traceable to plantation?'"
-
-**Action**: Type: 'What is our traceability percentage by mill?'
-
-### [3:00–3:45] ARCHITECTURE & DATA
-
-**Show**: Architecture & Data tab
-
-> "Seven Snowflake capabilities, six AWS services."
-
-**Action**: Walk through architecture diagram
-
+- 86% of global palm oil buyers now require full traceability to plantation level (CDP Forests)
+- RSPO-certified traceable palm oil commands 8-12% price premium over non-traceable (RSPO)
+- Malaysia's MSPO mandatory certification covers 94% of planted area as of 2023 (MPOCC)
+- Supply chain traceability reduces fraud risk by 45% and improves buyer confidence scores (Deloitte Supply Chain)
 
 ---
-
-## Key Demo Differentiators
-
-1. **Dynamic Tables for real-time chain-of-custody** — Only demo building supply chain traceability with Dynamic Tables — not batch ETL
-2. **Iceberg Tables for auditor self-service via Athena** — Only demo enabling external auditor access without Snowflake license
-3. **Row Access Policies for buyer data segregation** — Only demo enforcing multi-buyer data isolation in supply chain context
-4. **Malaysian palm oil traceability context** — RSPO, MSPO, NDPE-specific with realistic mill names and supply chain structure
-5. **200 audit reports searchable** — Cortex Search on third-party audit findings with severity classification
-6. **AWS Lake Formation + Iceberg integration** — Only demo showing Snowflake governance as alternative to Lake Formation for supply chain
-
-
----
-
-## Demo Prep Checklist
-
-### Data Verification
-- [ ] `SELECT COUNT(*) FROM PALM_OIL_TRACEABILITY.RAW.MILLS` → 100
-- [ ] `SELECT COUNT(*) FROM PALM_OIL_TRACEABILITY.RAW.CHAIN_OF_CUSTODY` → 50000
-- [ ] `SELECT COUNT(*) FROM PALM_OIL_TRACEABILITY.RAW.SHIPMENTS` → 20000
-
-### ML Model Verification
-- [ ] `SELECT COUNT(*) FROM PALM_OIL_TRACEABILITY.ML.MASS_BALANCE_ANOMALY_RESULTS WHERE IS_ANOMALY = TRUE` → >=3
-
-### AI/Agent Verification
-- [ ] `SELECT COUNT(*) FROM PALM_OIL_TRACEABILITY.AI.PARSED_AUDIT_REPORTS` → 200
-- [ ] `SELECT COUNT(*) FROM PALM_OIL_TRACEABILITY.AI.SHIPMENT_RISK_CLASSIFICATION` → >0
-
+Generated from `generator/demo_specs/aws-malaysia-palm-oil-traceability.json`. Do not hand-edit: run
+`python3 generator/gen_repo_docs.py aws-malaysia-palm-oil-traceability` instead.
