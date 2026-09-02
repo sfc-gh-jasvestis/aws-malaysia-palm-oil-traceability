@@ -32,15 +32,22 @@ export default function HomePage() {
       .catch(() => {});
   }, []);
 
+
+  // KPI values come from /api/data, which reads CURATED.KPI_SUMMARY. The literal
+  // stays as a fallback so the card still renders if the API is unavailable.
+  const kpiVal = (title: string, fallback: string): string =>
+    (data?.kpiCards as { title: string; value: string }[] | undefined)
+      ?.find((k) => k.title === title)?.value ?? fallback;
+
   const title = narrative?.title || 'SEA AWS Demo';
 
   const executiveCockpit = (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <KPICard title="TTP Coverage" value="96.8%" status="neutral" />
-        <KPICard title="MSPO Certified" value="87%" status="neutral" />
-        <KPICard title="Smallholders Traced" value="98K" status="neutral" />
-        <KPICard title="Mills Monitored" value="247" status="neutral" />
+        <KPICard title="TTP Coverage" value={kpiVal('TTP Coverage', '96.8%')} status="neutral" />
+        <KPICard title="MSPO Certified" value={kpiVal('MSPO Certified', '87%')} status="neutral" />
+        <KPICard title="Smallholders Traced" value={kpiVal('Smallholders Traced', '98K')} status="neutral" />
+        <KPICard title="Mills Monitored" value={kpiVal('Mills Monitored', '247')} status="neutral" />
       </div>
       <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         <div className="lg:col-span-1">
@@ -71,9 +78,9 @@ export default function HomePage() {
   const domainTab1 = (
     <div className="space-y-6">
       <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
-        <KPICard title="Collection Points" value="1,247" />
-        <KPICard title="GPS-Mapped Plots" value="84K" />
-        <KPICard title="Data Completeness" value="98%" />
+        <KPICard title="Collection Points" value={kpiVal('Collection Points', '1,247')} />
+        <KPICard title="GPS-Mapped Plots" value={kpiVal('GPS-Mapped Plots', '84K')} />
+        <KPICard title="Data Completeness" value={kpiVal('Data Completeness', '98%')} />
       </div>
       <Chart data={data?.detail || [{ x: 'Mon', y: 24 }, { x: 'Tue', y: 28 }, { x: 'Wed', y: 22 }, { x: 'Thu', y: 31 }, { x: 'Fri', y: 26 }, { x: 'Sat', y: 19 }, { x: 'Sun', y: 23 }]} type="area" xKey="x" yKeys={[{ key: 'y', name: 'MT (K)' }]} title="Volume by Supply Tier" height={400} />
     </div>
