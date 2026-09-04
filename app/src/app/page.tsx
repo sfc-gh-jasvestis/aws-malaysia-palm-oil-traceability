@@ -53,6 +53,7 @@ export default function HomePage() {
         <div className="lg:col-span-1">
           <GeoMap
             country="malaysia"
+            labels={{ entity: 'Mills', event: 'Chain of Custody', alert: 'Chain Gaps' }}
             regions={data?.regions}
             markers={[{"label": "Kuala Lumpur", "value": "PETRONAS Tower HQ", "color": "blue", "size": "lg"}, {"label": "Johor Bahru", "value": "Refinery: 242K bpd", "color": "green", "size": "lg"}, {"label": "Kota Kinabalu", "value": "Deepwater ops", "color": "green", "size": "md"}, {"label": "Kuching", "value": "Sarawak gas", "color": "green", "size": "md"}]}
             routes={[]}
@@ -70,9 +71,14 @@ export default function HomePage() {
       <DataTable columns={[
           { key: 'id', header: '#' },
           { key: 'name', header: 'Mill' },
+          { key: 'region', header: 'Region' },
           { key: 'status', header: 'TTP Status' },
-          { key: 'value', header: 'Coverage %' },
-      ]} data={data?.entities || []} title="Mill Traceability Status" />
+          { key: 'm1', header: 'Coverage %' },
+          { key: 'm2', header: 'Mspo Certified' },
+          { key: 'm3', header: 'Data Completeness' },
+          { key: 'events', header: 'Chain of Custody' },
+          { key: 'alerts', header: 'Chain Gaps' },
+        ]} data={data?.entities || []} title="Mill Traceability Status" />
     </div>
   );
 
